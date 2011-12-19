@@ -115,6 +115,32 @@ if(isset($_REQUEST['login'])){
 <head>
    <title>Login</title>
 
+   <script type="text/javascript">
+   function setCookie(c_name,value,exdays){
+      var exdate=new Date();
+      exdate.setDate(exdate.getDate() + exdays);
+      var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+      document.cookie=c_name + "=" + c_value;
+   }
+
+   function getCookie(c_name){
+      var i,x,y;
+      var arr = document.cookie.split(";");
+
+      for(i=0;i<arr.length;i++){
+         x = arr[i].split("=")[0];
+         y = arr[i].split("=")[1];
+
+         x = x.replace(/^\s+|\s+$/g,"");
+
+         if(x == c_name)
+            return unescape(y);
+      }
+
+      return false;
+   }
+   </script>
+
    <style type="text/css">
       a{
          text-decoration: none;
@@ -140,14 +166,48 @@ if(isset($_REQUEST['login'])){
                   <td><label for="user">Username</label></td>
                   <td><input type="text" id="user" name="username" tabindex="1" style="width:100px;" /></td>
                   <td>
-                     <a href="reg.php" title="Don't have an account yet? Sign Up Now!">&uarr;</a>
+                     <input type="checkbox" id="ru" title="Remeber Username" />
+                     <script type="text/javascript">
+                     window.onload = function(){
+                        frm = document.getElementById('frm');
+                        u   = document.getElementById('user');
+                        p   = document.getElementById('pwd');
+                        ru  = document.getElementById('ru');
+
+                        if(getCookie('rem_user')){
+                           ru.checked = true;
+                           user.value = getCookie('rem_user');
+                           p.focus();
+                        }else
+                           u.focus();
+
+                        frm.onsubmit = function(){
+                           if(ru.checked)
+                              setCookie('rem_user', u.value, 30);
+                           else
+                              setCookie('rem_user', 'null', -1);
+                        }
+                     }
+                     </script>
                   </td>
                </tr>
 
                <tr>
                   <td><label for="pwd">Password</label></td>
-                  <td><input type="password" id="pwd" name="passwd" tabindex="2" style="width:100px;" /></td>
-                      <input type="hidden"   id="con" name="delays" value="" />
+                  <td>
+                     <input type="password" id="pwd" name="passwd" tabindex="2" style="width:100px;" />
+                     <input type="hidden"   id="con" name="delays" value="" />
+                  </td>
+                  <td>
+                     <input type="checkbox" id="al" title="Auto Login || Stay logged in" />
+                     <script type="text/javascript">
+                     al = document.getElementById('al');
+
+                     al.onchange = function(){
+                        al.checked = false; // Temporally disabled!
+                     }
+                     </script>
+                  </td>
 
                      <script type="text/javascript">
                         inp  = document.getElementById('pwd');
@@ -207,8 +267,9 @@ if(isset($_REQUEST['login'])){
                <tr>
                   <td colspan="2" align="center">
                      <input type="submit" value="Submit" tabindex="3" />
-
-                     <!-- <a href="reg.php" style="float:right;">&uarr;</a> -->
+                  </td>
+                  <td align="center">
+                     <a href="reg.php" title="Don't have an account yet? Sign Up Now!">&rarr; <!-- &uarr; --></a>
                   </td>
                </tr>
             </table>
