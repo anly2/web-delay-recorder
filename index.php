@@ -3,9 +3,9 @@ include "mysql.php";
 define('pedantic', true, true);
 
 if(isset($_REQUEST['login'])){
-   @$user   = preg_replace('/[^a-zA-Z0-9à-ÿÀ-ß_\.\- :]/', '', $_REQUEST['username']);
+   @$user   = preg_replace('/[^a-zA-Z0-9--_\.\- :]/', '', $_REQUEST['username']);
       $user = strtolower($user);
-   @$pwd    = preg_replace('/[^a-zA-Z0-9à-ÿÀ-ß_\.\- :]/', '', $_REQUEST['passwd']);
+   @$pwd    = preg_replace('/[^a-zA-Z0-9--_\.\- :]/', '', $_REQUEST['passwd']);
       $pwd  = md5($pwd);
       unset($_REQUEST['passwd']);
    @$dlys   = preg_replace('/[^0-9,\-]/'                , '', $_REQUEST['delays']);
@@ -54,7 +54,7 @@ if(isset($_REQUEST['login'])){
          //Record increased familiarity every time
          if($pass)
             mysql_("UPDATE users SET Familiar=(Familiar+1) WHERE  Username='$user' AND Password='$pwd'");
-            // $familiar can be used for more complex $treshold
+            // $familiar can be used for more complex $treshold and update values
 
          //Update validity intervals
          update:{
@@ -73,7 +73,7 @@ if(isset($_REQUEST['login'])){
                   if(!isset($d[$k])) continue;
                   $c = (int)$d[$k];
 
-                  $d_[$k] = (round(($c+$f)/2)-15)."-".(round(($c+$t)/2)+15);
+                  $d_[$k] = (round(($c+$f)/2)-20)."-".(round(($c+$t)/2)+20);
                }
                mysql_("UPDATE users SET Delays='".join(",", $d_)."' WHERE Username='$user' AND Password='$pwd'");
             }
@@ -115,31 +115,7 @@ if(isset($_REQUEST['login'])){
 <head>
    <title>Login</title>
 
-   <script type="text/javascript">
-   function setCookie(c_name,value,exdays){
-      var exdate=new Date();
-      exdate.setDate(exdate.getDate() + exdays);
-      var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-      document.cookie=c_name + "=" + c_value;
-   }
-
-   function getCookie(c_name){
-      var i,x,y;
-      var arr = document.cookie.split(";");
-
-      for(i=0;i<arr.length;i++){
-         x = arr[i].split("=")[0];
-         y = arr[i].split("=")[1];
-
-         x = x.replace(/^\s+|\s+$/g,"");
-
-         if(x == c_name)
-            return unescape(y);
-      }
-
-      return false;
-   }
-   </script>
+   <script type="text/javascript" src="cookie.js"></script>
 
    <style type="text/css">
       a{
@@ -155,7 +131,7 @@ if(isset($_REQUEST['login'])){
 </head>
 <body>
 
-<table width="100%" height="100%">
+<table width="100%" height="100%" style="position:absolute; left:0%;">
    <tr>
       <td width="10%" height="100%"></td>
       <td width="80%" height="100%" align="center" valign="middle">
@@ -174,18 +150,18 @@ if(isset($_REQUEST['login'])){
                         p   = document.getElementById('pwd');
                         ru  = document.getElementById('ru');
 
-                        if(getCookie('rem_user')){
+                        if(cookie('rem_user')){
                            ru.checked = true;
-                           user.value = getCookie('rem_user');
+                           user.value = cookie('rem_user');
                            p.focus();
                         }else
                            u.focus();
 
                         frm.onsubmit = function(){
                            if(ru.checked)
-                              setCookie('rem_user', u.value, 30);
+                              cookie('rem_user', u.value, '30d');
                            else
-                              setCookie('rem_user', 'null', -1);
+                              cookie('rem_user', 'null', -1);
                         }
                      }
                      </script>
@@ -201,11 +177,13 @@ if(isset($_REQUEST['login'])){
                   <td>
                      <input type="checkbox" id="al" title="Auto Login || Stay logged in" />
                      <script type="text/javascript">
+                     //TEMPORAL
                      al = document.getElementById('al');
 
                      al.onchange = function(){
                         al.checked = false; // Temporally disabled!
                      }
+                     //TEMPORAL/
                      </script>
                   </td>
 
@@ -269,7 +247,9 @@ if(isset($_REQUEST['login'])){
                      <input type="submit" value="Submit" tabindex="3" />
                   </td>
                   <td align="center">
-                     <a href="reg.php" title="Don't have an account yet? Sign Up Now!">&rarr; <!-- &uarr; --></a>
+                     <a href="transition.php?to=reg.php" title="Don't have an account yet? Sign Up Now!">
+                      &rarr; <!-- &uarr; -->
+                     </a>
                   </td>
                </tr>
             </table>

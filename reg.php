@@ -55,7 +55,7 @@ if(isset($_REQUEST['register'])){
 </head>
 <body>
 
-<table width="100%" height="100%">
+<table width="100%" height="100%" style="position:absolute; left:0%;">
    <tr>
       <td width="10%" height="100%"></td>
       <td width="80%" height="100%" align="center" valign="middle">
@@ -143,7 +143,7 @@ if(isset($_REQUEST['register'])){
                   <td colspan="2" align="center">
                      <input type="submit" value="Sign Up" />
 
-                     <a href="index.php" style="float:left;">&larr;</a>
+                     <a href="transition.php?backward&to=index.php" style="float:left;">&larr;</a>
                   </td>
                </tr>
             </table>
