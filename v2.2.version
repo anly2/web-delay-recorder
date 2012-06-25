@@ -1,0 +1,25 @@
+### Password "Advanced" ###
+#This is a version file
+#  used for dynamically updating links so that people know there's something new
+#  it also contains the changelogs for a given project
+
+
+version 0
+    - Simple delay recording and person identification (via delays)
+
+version 1
+    - Code reworked
+    - Information is now stored in the session variable. In it's way that is very close to storage in real usage but still far enough
+    - PACK FUNCTION GOT OLD
+
+version 2
+    - Very simplified and improved
+    - Applicable login system
+
+version 2.1
+    - Added checkboxes for Remember_Username and Stay_Logged features
+         + Stay_Logged is disabled as this is only a demo
+
+version 2.2
+    - Tiny update to the cookie.js .  Is now a separate script file with inproved functionality.
+         + cookie.js also contains time parsing function. It is available at the "libraries"
